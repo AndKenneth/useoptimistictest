@@ -1,15 +1,20 @@
 'use client'
 /// <reference types="react/experimental" />
 
-import { useOptimistic } from 'react'
+import { experimental_useOptimistic as useOptimistic } from 'react'
 
 type Message = {
   message: string
 }
 
 export function Thread({ messages }: { messages: Message[] }) {
-  const [optimisticMessages, addOptimisticMessage] = useOptimistic(messages)
-
+  const [optimisticMessages, addOptimisticMessage] = useOptimistic<Message[]>(
+    messages,
+    (state: Message[], newMessage: string) => [
+      ...state,
+      { message: newMessage },
+    ]
+  )
   return (
     <div>
       {optimisticMessages.map((m, k) => (
@@ -19,7 +24,7 @@ export function Thread({ messages }: { messages: Message[] }) {
         action={async (formData: FormData) => {
           const message = formData.get('message') as string
 
-          addOptimisticMessage((msl) => [...msl, { message }])
+          addOptimisticMessage(message)
         }}
       >
         <input type="text" name="message" />
