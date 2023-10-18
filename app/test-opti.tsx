@@ -1,4 +1,5 @@
 'use client'
+/// <reference types="react/experimental" />
 
 import { useOptimistic } from 'react'
 
